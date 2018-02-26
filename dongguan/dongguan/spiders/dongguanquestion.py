@@ -5,19 +5,29 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 import scrapy
 from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
+# from scrapy.spiders import CrawlSpider, Rule
+from scrapy.spiders import Rule
+from scrapy_redis.spiders import RedisCrawlSpider
 from dongguan.items import DongguanItem
 
-class DongguanquestionSpider(CrawlSpider):
+# class DongguanquestionSpider(CrawlSpider):
+class DongguanquestionSpider(RedisCrawlSpider):
     name = 'dongguanquestion'
-    allowed_domains = ['wz.sun0769.com']
-    start_urls = ['http://wz.sun0769.com/index.php/question/report?page=0']
+    redis_key = 'DongguanquestionSpider:start_urls'
+    # allowed_domains = ['wz.sun0769.com']
+    # start_urls = ['http://wz.sun0769.com/index.php/question/report?page=0']
     pagelinks = LinkExtractor(allow='page=\d+')
     questionlinks = LinkExtractor(allow='/question/\d+/\d+.shtml')
     rules = (
         Rule(pagelinks),
         Rule(questionlinks, callback='parse_item'),
     )
+    def __init__(self, *args, **kwargs):
+        # Dynamically define the allowed domains list.
+        domain = kwargs.pop('domain', '')
+        self.allowed_domains = filter(None, domain.split(','))
+        super(DongguanquestionSpider, self).__init__(*args, **kwargs)
+
 
     def parse_item(self, response):
         item = DongguanItem()

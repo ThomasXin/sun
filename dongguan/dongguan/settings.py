@@ -53,7 +53,20 @@ DOWNLOAD_DELAY = 1
 #SPIDER_MIDDLEWARES = {
 #    'dongguan.middlewares.DongguanSpiderMiddleware': 543,
 #}
-
+# 使用了Scrapy-redis里的去重组件，不使用Scrapy默认的去重
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+# 使用了Scrapy-redis里的调度器组件，不使用Scrapy默认的调度
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# 允许暂停，redis请求记录不丢失
+SCHEDULER_PERSIST = True
+# 下面三个选择启用一个，启用第一个最好
+# 默认的Scrapy-redis请求(按优先级顺序)队列形式
+SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderPriorityQueue"
+# 队列形式，请求先进先出
+#SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderQueue"
+# 栈形式，请求先进后出
+#SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderStack"
+# scrapy_redis.pipelines.RedisPipeline 支持将数据存储到Redis数据库里，必须启动
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
@@ -78,9 +91,11 @@ USER_AGENTS = [
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'dongguan.pipelines.DongguanPipeline': 300,
-# }
+ITEM_PIPELINES = {
+   'dongguan.pipelines.DongguanPipeline': 500,
+   'scrapy_redis.pipelines.RedisPipeline': 400,
+
+}
 RETRY_HTTP_CODES = [500, 502, 503, 504, 400, 403, 404, 408]
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
