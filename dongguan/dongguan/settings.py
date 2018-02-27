@@ -13,11 +13,11 @@ BOT_NAME = 'dongguan'
 
 SPIDER_MODULES = ['dongguan.spiders']
 NEWSPIDER_MODULE = 'dongguan.spiders'
-
-MONGODB_HOST = '127.0.0.1'
-MONGODB_PORT = 27017
-MONGODB_DBNAME = 'DGquestion'
-MONGODB_SHEETNAME = 'DGQ'
+# 因为Ubuntu上没有MongoDB所以不用
+# MONGODB_HOST = '127.0.0.1'
+# MONGODB_PORT = 27017
+# MONGODB_DBNAME = 'DGquestion'
+# MONGODB_SHEETNAME = 'DGQ'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'dongguan (+http://www.yourdomain.com)'
@@ -96,6 +96,10 @@ ITEM_PIPELINES = {
    'scrapy_redis.pipelines.RedisPipeline': 400,
 
 }
+# 指定redis数据库的主机地址和端口号
+REDIS_HOST = '192.168.99.1'
+REDIS_PORT = 6379
+# 跳过一下错误，继续执行
 RETRY_HTTP_CODES = [500, 502, 503, 504, 400, 403, 404, 408]
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

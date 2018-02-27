@@ -10,15 +10,16 @@ from scrapy.conf import settings
 class DongguanPipeline(object):
 
     def __init__(self):
-        host = settings['MONGODB_HOST']
-        port = settings['MONGODB_PORT']
-        dbname = settings['MONGODB_DBNAME']
-        sheetname = settings['MONGODB_SHEETNAME']
-
-        client = pymongo.MongoClient(host=host, port=port)
-        mydb = client[dbname]
-        self.mysheet = mydb[sheetname]
-    def process_item(self, item, spider):
-        data = dict(item)
-
-        self.mysheet.insert(data)
+        pass
+    #     host = settings['MONGODB_HOST']
+    #     port = settings['MONGODB_PORT']
+    #     dbname = settings['MONGODB_DBNAME']
+    #     sheetname = settings['MONGODB_SHEETNAME']
+    #
+    #     client = pymongo.MongoClient(host=host, port=port)
+    #     mydb = client[dbname]
+    #     self.mysheet = mydb[sheetname]
+    # def process_item(self, item, spider):
+    #     data = dict(item)
+    #
+    #     self.mysheet.insert(data)
